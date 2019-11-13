@@ -12,14 +12,9 @@ class User < ActiveRecord::Base
         self.attempts.select do |attempt|
             attempt.complete == true
         end
-    end
-            
+    end     
 
     def record
-     puts "Your record... Attempts: #{self.attempts.count}, Wins: #{self.wins.count}"
-     
+     puts "Your record... Attempts: #{self.attempts.count}, Wins: #{self.wins.count}".colorize(:yellow)   
     end
-
-
 end
-

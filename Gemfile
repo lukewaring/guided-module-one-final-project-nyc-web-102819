@@ -7,3 +7,6 @@ gem "pry"
 gem "require_all"
 gem 'tty-prompt', '~> 0.19.0'
 gem 'audio-playback'
+gem 'figlet'
+gem 'colorize'
+gem 'catpix'

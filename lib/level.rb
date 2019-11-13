@@ -1,5 +1,6 @@
 require 'tty-prompt'
 require 'audio-playback'
+require 'catpix'
 
 class Level < ActiveRecord::Base
     has_many :attempts
@@ -8,48 +9,69 @@ class Level < ActiveRecord::Base
     Prompt = TTY::Prompt.new
 
     def self.fail
-        puts " UH-OH YOU FAILED"
-        
+        slow_print_message("UH-OH YOU FAILED 😢", 0.05)
+        puts ""
+        puts " "
         sleep (3)
-        
-        input = Prompt.select("Try agian?", %w(Yes No))
-            
+        input = Prompt.select("Try again?", %w(Yes No))
         if input == "Yes"
             return "Try again"
         else
             return "Exit"
         end
-        
     end  
 
     def self.level_1_stage_1
-        puts "STAGE 1!"
+        puts "STAGE 1".colorize(:magenta)
+        puts ""
         sleep (2)
-        puts "There's a Koopa!"
+        slow_print_message("There's a Koopa!", 0.05)
+        puts ""
+        puts " "
         sleep (2)
-        puts "You can defeat it by jumping, burning, freezing, eating, spinning"
+        slow_print_message("You can defeat it by jumping, burning, freezing, eating or spinning", 0.05)
+        puts " "
     end
 
     def self.level_1_stage_2
-        puts "STAGE 2!"
+        puts "STAGE 2".colorize(:magenta)
+        puts ""
         sleep (2)
-        puts "There's a ditch!"
+        slow_print_message("There's a ditch!", 0.05)
+        puts ""
+        puts " "
         sleep (2)
-        puts "You must jump over the ditch"
+        slow_print_message("You must jump over the ditch", 0.05)
+        puts " "
     end
 
     def self.level_1_stage_3
-        
-        
-        puts "STAGE 3!"
+        puts "STAGE 3".colorize(:magenta)
+        puts ""
         sleep (2)
-        puts "There's BOWSER!"
+        slow_print_message("There's BOWSER! He's terrifying 😱".colorize(:red), 0.05)
+        puts " "
+        puts " "
+
+        Catpix::print_image "./photos/bowser.jpg",
+            :limit_x => 1,
+            :limit_y => 1
+            # :center_x => true,
+            # :center_y => true,
+            # :bg => "black",
+            # :bg_fill => false
+            #:resolution(high)
+
+        puts " "
+        puts " "
         sleep (2)
-        puts "You can defeate BOWSER by freezing him in place, then spinning"
+        slow_print_message("You can defeat BOWSER by freezing him in place, then spinning", 0.05)
+        puts " "
     end
 
-
-
-
-
+    def self.slow_print_message(message,speed)
+        message.each_char do |x|
+            sleep (speed); print x
+        end
+    end
 end
