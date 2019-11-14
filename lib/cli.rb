@@ -2,6 +2,7 @@ require 'tty-prompt'
 require 'audio-playback'
 require 'figlet'
 require 'colorize'
+require 'tabulo'
 
 class CommandLineInterface
     Prompt = TTY::Prompt.new
@@ -18,7 +19,20 @@ class CommandLineInterface
         greet
         puts ""
         check_for_account
-        game_selection
+        scores_or_game
+    end
+
+    def scores_or_game
+        selection = Prompt.select("Would you like to view top scores or start a new game?") do |menu|
+            menu.choice "View top scores"
+            menu.choice "Start a new game"
+        end
+        puts " "
+        if selection == "Start a new game"
+            game_selection    
+        else
+            top_scores
+        end
     end
 
     def game_selection
@@ -35,6 +49,35 @@ class CommandLineInterface
         play_game
     end
 
+    def ranking
+        ranking_array = []
+        User.all.map do |each|
+            ranking_array << [each.name, each.attempts.count, each.wins.count]
+        end
+        ranking_array.sort_by {|instance| [-instance[2],instance[1]]}
+     end
+
+    def top_scores
+        table = Tabulo::Table.new(ranking) do |t|
+            t.add_column("Name") {|n| n[0]}
+            t.add_column("Attempts") {|n| n[1]}
+            t.add_column("Wins") {|n| n[2]}
+          end
+        puts table
+        puts " "
+        sleep(2)
+        selection = Prompt.select("Would you like to play a new game or exit?") do |menu|
+            menu.choice "Play a new game"
+            menu.choice "Exit"
+        end
+        if selection == "Play a new game"
+            puts " "
+            game_selection
+        else
+            exit_game
+        end
+    end
+
     def banner
         puts ""
         puts "    ____                          __  __            _          ____ _     ___   ".colorize(:red)
@@ -47,8 +90,6 @@ class CommandLineInterface
 
     def greet
         @playback = AudioPlayback.play("/Users/lukewaring2/Development/project_1/module-one-final-project-nyc-web-102819/sounds/open.wav")
-        
-        #slow_print_message(message,speed)
         slow_print_message("Welcome to Super Mario CLI!",0.1) 
         sleep (1)
         puts ""
@@ -105,6 +146,7 @@ class CommandLineInterface
     end
 
     def choose_item_1
+        puts "You can choose two items. Your character's ability along with your items will determine your success in the game"
         item_1 = Prompt.select("Choose your first item") do |menu|
             menu.choice "fire flower - burn".colorize(:red)
             menu.choice "ice flower - freeze".colorize(:cyan)
@@ -174,7 +216,6 @@ class CommandLineInterface
             puts " "
             puts " "
             puts " "
-            
         else
             puts "You couldn't jump over the ditch".colorize(:red)
             puts " "
@@ -197,7 +238,6 @@ class CommandLineInterface
     end
 
     def game_fail
-        # Level.fail
         @playback = AudioPlayback.play("/Users/lukewaring2/Development/project_1/module-one-final-project-nyc-web-102819/sounds/fail.wav")
             sleep (2)
         if Level.fail == "Try again"
@@ -209,7 +249,6 @@ class CommandLineInterface
 
     def game_win
         @playback = AudioPlayback.play("/Users/lukewaring2/Development/project_1/module-one-final-project-nyc-web-102819/sounds/pass.wav")
-        
         @@attempt.complete = 1
         @@attempt.save
 

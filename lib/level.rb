@@ -56,11 +56,6 @@ class Level < ActiveRecord::Base
         Catpix::print_image "./photos/bowser.jpg",
             :limit_x => 1,
             :limit_y => 1
-            # :center_x => true,
-            # :center_y => true,
-            # :bg => "black",
-            # :bg_fill => false
-            #:resolution(high)
 
         puts " "
         puts " "
