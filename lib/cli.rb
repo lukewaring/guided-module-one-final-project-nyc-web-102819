@@ -55,14 +55,14 @@ class CommandLineInterface
             ranking_array << [each.name, each.attempts.count, each.wins.count]
         end
         ranking_array.sort_by {|instance| [-instance[2],instance[1]]}
-     end
+    end
 
     def top_scores
         table = Tabulo::Table.new(ranking) do |t|
             t.add_column("Name") {|n| n[0]}
             t.add_column("Attempts") {|n| n[1]}
             t.add_column("Wins") {|n| n[2]}
-          end
+        end
         puts table
         puts " "
         sleep(2)
@@ -131,9 +131,12 @@ class CommandLineInterface
     def choose_level
         level_select = Prompt.select("Choose a level") do |menu|
             menu.choice "Yoshi's Island"
-          end
+            menu.choice "Donkey Kong's Tree House"
+        end
         if level_select == "Yoshi's Island"
-            @@current_level = Level.find_by(name: "Yoshi's Island") 
+            @@current_level = Level.find_by(name: "Yoshi's Island")
+        else
+            @@current_level = Level.find_by(name: "Donkey Kong's Tree House")
         end
     end
 
@@ -141,18 +144,19 @@ class CommandLineInterface
         character = Prompt.select("Choose a character. The character's special ability is listed after the hypen") do |menu|
             menu.choice "Mario - duck".colorize(:red)
             menu.choice "Luigi - jump".colorize(:green)
-          end
+        end
         @@character = character
     end
 
     def choose_item_1
         puts "You can choose two items. Your character's ability along with your items will determine your success in the game"
+        puts " "
         item_1 = Prompt.select("Choose your first item") do |menu|
             menu.choice "fire flower - burn".colorize(:red)
             menu.choice "ice flower - freeze".colorize(:cyan)
             menu.choice "Yoshi - eat".colorize(:green)
             menu.choice "cape - spin".colorize(:yellow)
-          end
+        end
         @@item_1 = item_1
     end
 
@@ -162,7 +166,7 @@ class CommandLineInterface
             menu.choice "ice flower - freeze".colorize(:cyan)
             menu.choice "Yoshi - eat".colorize(:green)
             menu.choice "cape - spin".colorize(:yellow)
-          end
+        end
         @@item_2 = item_2
     end
 
@@ -175,6 +179,15 @@ class CommandLineInterface
     end
 
     def play_game
+        if @@current_level.name == "Yoshi's Island"
+            play_level_1
+        else
+            play_level_2
+        end
+        exit_game
+    end
+
+    def play_level_1
         Level.level_1_stage_1
         puts ""
         sleep (3)
@@ -189,7 +202,25 @@ class CommandLineInterface
         puts ""
         sleep (3)
         level_1_stage_3_test
-        sleep (3)      
+        sleep (3)
+    end
+
+    def play_level_2
+        Level.level_2_stage_1
+        puts ""
+        sleep (3)
+        level_2_stage_1_test
+        sleep (3)
+        Level.level_2_stage_2
+        puts ""
+        sleep (3)
+        level_2_stage_2_test
+        sleep (3)
+        Level.level_2_stage_3
+        puts ""
+        sleep (3)
+        level_2_stage_3_test
+        sleep (3)
     end
 
     def level_1_stage_1_test
@@ -237,9 +268,55 @@ class CommandLineInterface
         end
     end
 
+    def level_2_stage_1_test
+        if @@character == "Mario - duck".colorize(:red)
+            puts "You ducked under Bullet Bill".colorize(:green)
+            puts ""
+            sleep (2)
+            slow_print_message("Proceed to Stage 2!", 0.05)
+            puts ""
+            puts ""
+            puts " "
+        else
+            puts "You couldn't duck under Bullet Bill".colorize(:red)
+            puts " "
+            game_fail
+        end
+    end
+
+    def level_2_stage_2_test
+        if @@item_1 == "fire flower - burn".colorize(:red)|| @@item_2 == "fire flower - burn".colorize(:red)
+            puts "You defeated Charging Chuck".colorize(:green)
+            puts ""
+            sleep (2)
+            slow_print_message("Proceed to Stage 3!", 0.05)
+            puts " "
+            puts " "
+            puts " "
+        else
+            puts "You were tackled by by Charging Chuck".colorize(:red)
+            puts " "
+            game_fail
+        end
+    end
+
+    def level_2_stage_3_test
+        if (@@item_1 == "Yoshi - eat".colorize(:green) || @@item_2 == "Yoshi - eat".colorize(:green))
+            puts "You defeated DONKEY KONG and showed him who's boss!".colorize(:green)
+            puts ""
+            sleep (2)
+            game_win
+        else
+            puts "You couldn't defeat DONKEY KONG".colorize(:red)
+            sleep (1)
+            puts " "
+            game_fail
+        end
+    end
+
     def game_fail
         @playback = AudioPlayback.play("/Users/lukewaring2/Development/project_1/module-one-final-project-nyc-web-102819/sounds/fail.wav")
-            sleep (2)
+        sleep (2)
         if Level.fail == "Try again"
             game_selection
         else

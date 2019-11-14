@@ -63,6 +63,47 @@ class Level < ActiveRecord::Base
         slow_print_message("You can defeat BOWSER by freezing him in place, then spinning", 0.05)
         puts " "
     end
+  
+    def self.level_2_stage_1
+        puts "STAGE 1".colorize(:magenta)
+        puts ""
+        sleep (2)
+        slow_print_message("There's a Bullet Bill!", 0.05)
+        puts ""
+        puts " "
+        sleep (2)
+        slow_print_message("You must duck under Bullet Bill", 0.05)
+        puts " "
+    end
+    def self.level_2_stage_2
+        puts "STAGE 2".colorize(:magenta)
+        puts ""
+        sleep (2)
+        slow_print_message("There's a Charging Chuck!", 0.05)
+        puts ""
+        puts " "
+        sleep (2)
+        slow_print_message("You can defeat Charging Chuck by burning him", 0.05)
+        puts " "
+    end
+    def self.level_2_stage_3
+        puts "STAGE 3".colorize(:magenta)
+        puts ""
+        sleep (2)
+        slow_print_message("There's DONKEY KONG! 🦍".colorize(:red), 0.05)
+        puts " "
+        puts " "
+
+        Catpix::print_image "./photos/donkey_kong.png",
+            :limit_x => 1,
+            :limit_y => 1
+
+        puts " "
+        puts " "
+        sleep (2)
+        slow_print_message("You can defeat DONKEY KONG by burning him, then eating a nearby Koopa and launching a shell", 0.05)
+        puts " "
+    end
 
     def self.slow_print_message(message,speed)
         message.each_char do |x|
