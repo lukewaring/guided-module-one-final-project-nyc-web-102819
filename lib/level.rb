@@ -19,6 +19,7 @@ class Level < ActiveRecord::Base
         else
             return "Exit"
         end
+        puts " "
     end  
 
     def self.level_1_stage_1
@@ -55,7 +56,8 @@ class Level < ActiveRecord::Base
 
         Catpix::print_image "./photos/bowser.jpg",
             :limit_x => 1,
-            :limit_y => 1
+            :limit_y => 1,
+            :resolution => "high"
 
         puts " "
         puts " "
@@ -75,6 +77,7 @@ class Level < ActiveRecord::Base
         slow_print_message("You must duck under Bullet Bill", 0.05)
         puts " "
     end
+    
     def self.level_2_stage_2
         puts "STAGE 2".colorize(:magenta)
         puts ""
@@ -86,6 +89,7 @@ class Level < ActiveRecord::Base
         slow_print_message("You can defeat Charging Chuck by burning him", 0.05)
         puts " "
     end
+
     def self.level_2_stage_3
         puts "STAGE 3".colorize(:magenta)
         puts ""
@@ -96,12 +100,13 @@ class Level < ActiveRecord::Base
 
         Catpix::print_image "./photos/donkey_kong.png",
             :limit_x => 1,
-            :limit_y => 1
+            :limit_y => 1,
+            :resolution => "high"
 
         puts " "
         puts " "
         sleep (2)
-        slow_print_message("You can defeat DONKEY KONG by burning him, then eating a nearby Koopa and launching a shell", 0.05)
+        slow_print_message("You can defeat DONKEY KONG by burning him, then eating a nearby Koopa and launching the shell", 0.05)
         puts " "
     end
 

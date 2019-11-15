@@ -74,6 +74,7 @@ class CommandLineInterface
             puts " "
             game_selection
         else
+            puts " "
             exit_game
         end
     end
@@ -233,7 +234,7 @@ class CommandLineInterface
             puts ""
             puts " "
         else
-            puts "You couldn't defeat the Koopa".colorize(:red)
+            flash_message("You couldn't defeat the Koopa".colorize(:red))
             game_fail
         end
     end
@@ -248,8 +249,9 @@ class CommandLineInterface
             puts " "
             puts " "
         else
-            puts "You couldn't jump over the ditch".colorize(:red)
+            flash_message("You couldn't jump over the ditch".colorize(:red))
             puts " "
+
             game_fail
         end
     end
@@ -261,7 +263,7 @@ class CommandLineInterface
             sleep (2)
             game_win
         else
-            puts "You couldn't defeat BOWSER".colorize(:red)
+            flash_message("You couldn't defeat BOWSER".colorize(:red))
             sleep (1)
             puts " "
             game_fail
@@ -278,7 +280,7 @@ class CommandLineInterface
             puts ""
             puts " "
         else
-            puts "You couldn't duck under Bullet Bill".colorize(:red)
+            flash_message("You couldn't duck under Bullet Bill".colorize(:red))
             puts " "
             game_fail
         end
@@ -294,7 +296,7 @@ class CommandLineInterface
             puts " "
             puts " "
         else
-            puts "You were tackled by by Charging Chuck".colorize(:red)
+            flash_message("You were tackled by by Charging Chuck".colorize(:red))
             puts " "
             game_fail
         end
@@ -307,7 +309,7 @@ class CommandLineInterface
             sleep (2)
             game_win
         else
-            puts "You couldn't defeat DONKEY KONG".colorize(:red)
+            flash_message("You couldn't defeat DONKEY KONG".colorize(:red))
             sleep (1)
             puts " "
             game_fail
@@ -320,6 +322,7 @@ class CommandLineInterface
         if Level.fail == "Try again"
             game_selection
         else
+            puts " "
             exit_game
         end
     end
@@ -348,7 +351,6 @@ class CommandLineInterface
     end
 
     def exit_game
-        puts " "
         slow_print_message("Thank you for playing", 0.05)
         puts ""
         exit
@@ -358,5 +360,17 @@ class CommandLineInterface
         message.each_char do |x|
             sleep (speed); print x
         end
+    end
+
+    def flash_message(message)
+        3.times do
+            STDOUT.print "\r#{message}"
+            sleep 0.5
+            num = message.length - 14
+            STDOUT.print "\r#{' ' * num}"
+            sleep 0.5
+        end
+        STDOUT.print "\r#{message}"
+        puts " "
     end
 end
