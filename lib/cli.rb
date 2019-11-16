@@ -296,7 +296,7 @@ class CommandLineInterface
             puts " "
             puts " "
         else
-            flash_message("You were tackled by by Charging Chuck".colorize(:red))
+            flash_message("You were tackled by Charging Chuck".colorize(:red))
             puts " "
             game_fail
         end
